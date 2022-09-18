@@ -1,6 +1,7 @@
 use std::{
     env::args,
     fs::{self, read_dir, DirEntry},
+    io::ErrorKind,
 };
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
@@ -37,7 +38,17 @@ fn main() -> Result<()> {
         .map(|x| x.into())
         .unwrap_or(fs::canonicalize("./")?);
 
-    let dir = fs::read_dir(&dir_path)?;
+    let dir = match fs::read_dir(&dir_path) {
+        Ok(x) => x,
+        Err(e) => match e.kind() {
+            ErrorKind::NotFound => {
+                return Err(
+                    "Filepath was invalid. Try wrapping the path in quotation marks.".into(),
+                )
+            }
+            _ => return Err(Box::new(e)),
+        },
+    };
     let mut entries = vec![];
     for entry in dir {
         entries.push(convert_dir_entry(entry?)?);
@@ -45,7 +56,6 @@ fn main() -> Result<()> {
 
     entries.sort_unstable_by_key(|x| x.size);
     entries.reverse();
-    println!("[.../{}]", dir_path.file_name().unwrap().to_string_lossy());
     for entry in entries {
         let size = entry.size;
         let size_mb = (size as f64) / 1000.0 / 1000.0;
