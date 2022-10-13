@@ -25,24 +25,6 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "temp test",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=fwr",
-                    "--package=folder-weight-rank"
-                ],
-                "filter": {
-                    "name": "fwr",
-                    "kind": "bin"
-                }
-            },
-            "args": ["-t", "E:/"],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
             "name": "Debug executable 'fwr' search E drive with timing",
             "cargo": {
                 "args": [
