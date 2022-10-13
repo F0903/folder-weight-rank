@@ -25,6 +25,24 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Debug executable 'fwr' search E drive.",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=fwr",
+                    "--package=folder-weight-rank"
+                ],
+                "filter": {
+                    "name": "fwr",
+                    "kind": "bin"
+                }
+            },
+            "args": ["E:/"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Debug unit tests in executable 'fwr'",
             "cargo": {
                 "args": [
