@@ -43,7 +43,7 @@ impl RunArgs {
 
     pub fn from_args(args: Args) -> Result<Self> {
         let mut run_args = Self::default();
-        let mut arg_iter = args.peekable();
+        let mut arg_iter = args.skip(1).peekable();
         loop {
             let arg = match arg_iter.next() {
                 Some(x) => x,
@@ -75,7 +75,7 @@ impl RunArgs {
 impl Default for RunArgs {
     fn default() -> Self {
         Self {
-            path: PathBuf::new(),
+            path: std::env::current_dir().expect("Could not get current dir!"),
             timed: false,
             size_unit: SizeUnit::KiloByte,
             thread_count: available_parallelism()

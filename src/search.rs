@@ -49,11 +49,12 @@ fn get_entries(dir: ReadDir, max_threads: u8) -> Vec<Entry> {
     thread::scope(|s| {
         let cvar_pair = Arc::new((Mutex::new(false), Condvar::new()));
         let (lock, cvar) = &*cvar_pair;
+
         for entry in dir {
             if running_threads.load(Ordering::Acquire) >= max_threads {
                 let mut all_busy = lock.lock().unwrap();
                 *all_busy = true;
-                let _ = cvar.wait(all_busy).unwrap();
+                let _a = cvar.wait(all_busy).unwrap();
             }
             let cvar_pair = cvar_pair.clone();
             let tx = tx.clone();
